@@ -1,0 +1,80 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script src="~/resources/jquery-1.11.3.min.js"></script>
+    <meta name="viewport" content="width=device-width" />
+    <title>Odeme</title>
+    <script>
+        function SendRequest()
+        {
+            $.ajax({
+                url: 'https://secure.payu.com/api/v2_1/orders',
+                contentType: 'application/json',
+                type: 'POST',
+                headers: {
+                    'Access-Control-Allow-Origin': '*'
+                },
+                beforeSend: function (xhr) {
+                    // generate base 64 string from username + password
+                    //var bytes = Crypto.charenc.Binary.stringToBytes("145227" + ":" + "13a980d4f851f3d9a1cfc792fb1f5e50");
+                    //var base64 = Crypto.util.bytesToBase64(bytes);
+                    // set header
+                    xhr.setRequestHeader("Authorization", "Basic " + "MTQ1MjI3OjEzYTk4MGQ0Zjg1MWYzZDlhMWNmYzc5MmZiMWY1ZTUw");
+
+                },
+
+                data: JSON.stringify({
+                    "notifyUrl": "/odeme-tesekkur",
+                    "customerIp": "127.0.0.1",
+                    "merchantPosId": "145227",
+                    "description": "Your order description",
+                    "currencyCode": "TRY",
+                    "totalAmount": "1000",
+                    "products": [
+                        {
+                            "name": "Product 1",
+                            "unitPrice": "400",
+                            "quantity": "1"
+                        },
+                        {
+                            "name": "Product 2",
+                            "unitPrice": "600",
+                            "quantity": "1"
+                        }
+                    ]
+                }),
+                dataType: "json",
+            }).success(function (result,xhr,status) {
+                debugger;
+                alert(xhr.status);
+            }).error(function (xhr, status) {
+                alert("İşlem başarısız" + xhr.responseText);
+            });
+
+        }
+    </script>
+</head>
+<body>
+    <input type="button" onclick="SendRequest()" value="abc" name="cba" />
+    @*<form method="post" action="https://secure.payu.com/api/v2_1/orders">
+        <input type="hidden" name="continueUrl" value="/odeme-tesekkur">
+        <input type="hidden" name="currencyCode" value="PLN">
+        <input type="hidden" name="customerIp" value="123.123.123.123">
+        <input type="hidden" name="description" value="Order description">
+        <input type="hidden" name="merchantPosId" value="145227">
+        <input type="hidden" name="notifyUrl" value="http://shop.url/notify">
+        <input type="hidden" name="products[0].name" value="Product 1">
+        <input type="hidden" name="products[0].quantity" value="1">
+        <input type="hidden" name="products[0].unitPrice" value="1000">
+        <input type="hidden" name="totalAmount" value="1000">
+        <input type="hidden" name="OpenPayu-Signature" value="sender=145227;algorithm=MD5;signature=13a980d4f851f3d9a1cfc792fb1f5e50">
+        <button type="submit" formtarget="_blank">Pay with PayU</button>
+    </form>*@
+</body>
+</html>
